@@ -5,10 +5,28 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "5000:3000"
+      - 5000:3000
     volumes:
       - ./backend:/go/src/app
     command: >
       reflex
       -r (\.go$$|go\.mod)
       -s go run main.go
+
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    ports:
+      - 5555:8080
+
+volumes:
+  mysql-data:
